@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+bool checkInput(string a, string b) {
+	string warn = "Wrong input!\n";
+	for (int i = 0; i < a.size(); i++)
+		if (not (a[i] >= '0' and a[i] <= '9')) {
+			cout << warn;
+			return false;
+		}
+	for (int i = 0; i < b.size(); i++)
+		if (not (b[i] >= '0' and b[i] <= '9')) {
+			cout << warn;
+			return false;
+		}
+	return true;
+}
+
+void normalize(string &a, string &b) {
+	if (b.size() > a.size())
+		swap(a, b);
+	reverse(a.begin(), a.end());
+	reverse(b.begin(), b.end());
+	for (int i = b.size(); i < a.size(); i++)
+		b += '0';
+}
+
+void resDif(string a, string b) {
+	normalize(a, b);
+	vector <int> ans;
+	int tmp = 0, i = 0;
+
+
+	while (i < a.size()) {
+		tmp = a[i] - b[i];
+		if (tmp < 0) {
+			a[i + 1]--;
+			tmp += 10;
+		}
+		ans.push_back(tmp);
+		i++;
+	}
+
+
+	int flag = -1; i = 0;
+	reverse(ans.begin(), ans.end());
+	while (ans[i] == 0 and i < ans.size() - 1)
+	{
+		flag = i;
+		i++;
+	}
+
+
+	if (flag != -1)
+		ans.erase(ans.begin(), ans.begin() + flag + 1);
+	for (int i = 0; i < ans.size(); i++)
+		cout << ans[i];
+}
+
+int main() {
+	string a, b;
+	getline(cin, a);
+	getline(cin, b);
+	if (checkInput(a, b))
+		resDif(a, b);
+}
